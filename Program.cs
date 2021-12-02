@@ -30,7 +30,37 @@ namespace DominandoEFCore
             // MigracoesJaAplicadas();
             // ScriptGeralDoBancoDeDados();
             // CarregamentoAdiantado();
-            CarregamentoExplicito();
+            // CarregamentoExplicito();
+            CarregamentoLento();
+        }
+        // Carregamento Lento (LazyLoad)
+        static void CarregamentoLento()
+        {
+            using var db = new Curso.Data.ApplicationContext();
+            Curso.Scripts.TiposDeCarregamento.SetupTiposDeCarregamento(db);
+
+            // db.ChangeTracker.LazyLoadingEnabled = false;
+            var departamentos = db
+                .Departamentos
+                .ToList(); // Ao invés de ToList() pode ser adicionado na string de conexão o seguinte parâmetro: MultipleActiveResultSets=true
+
+            foreach (var departamento in departamentos)
+            {
+                Console.WriteLine("---------------------------------------");
+                Console.WriteLine($"Departamento: {departamento.Descricao}");
+
+                if (departamento.Funcionarios?.Any() ?? false)
+                {
+                    foreach (var funcionario in departamento.Funcionarios)
+                    {
+                        Console.WriteLine($"\tFuncionário: {funcionario.Nome}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"\tNenhum funcionário encontrado!");
+                }
+            }
         }
         // Carregamento Explícito
         static void CarregamentoExplicito()
