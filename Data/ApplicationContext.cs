@@ -15,9 +15,9 @@ namespace Consultas.Data
         {
             const string strConnection = "Data Source=GUIDE-LUIZJEDI;Initial Catalog=Jedi_Consultas;Integrated Security=true;pooling=true";
             optionsBuilder
-                 .UseSqlServer(strConnection)
+                 .UseSqlServer(strConnection, p => p.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)) // QuerySplittingBehavior faz a divisão das consultas de forma global
                  .EnableSensitiveDataLogging()
-                 .LogTo(Console.WriteLine, LogLevel.Error);
+                 .LogTo(Console.WriteLine, LogLevel.Information);
         }
 
         // Filtra as consultas de forma global, de acordo a lógica solicitada
