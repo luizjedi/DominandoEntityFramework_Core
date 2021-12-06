@@ -15,7 +15,7 @@ namespace Stored_Procedures.Data
         {
             const string strConnection = "Data Source=GUIDE-LUIZJEDI;Initial Catalog=Jedi_StoredProcedures;Integrated Security=true;pooling=true";
             optionsBuilder
-                 .UseSqlServer(strConnection, p => p.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)) // QuerySplittingBehavior faz a divisão das consultas de forma global
+                 .UseSqlServer(strConnection)
                  .EnableSensitiveDataLogging()
                  .LogTo(Console.WriteLine, LogLevel.Information);
         }
