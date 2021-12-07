@@ -8,9 +8,19 @@ namespace infraestrutura
         static void Main(string[] args)
         {
             // FiltroGlobal();
-            ConsultarDepartamentos();
+            // ConsultarDepartamentos();
+            DadosSensiveis();
         }
 
+        // Dados sensíveis
+        static void DadosSensiveis()
+        {
+            using var db = new Infraestrutura.Data.ApplicationContext();
+
+            var descricao = "Departamento";
+            var departamentos = db.Departamentos.Where(x => x.Descricao == descricao).ToArray();
+        }
+        // Consultar Departamentos
         static void ConsultarDepartamentos()
         {
             using var db = new Infraestrutura.Data.ApplicationContext();
