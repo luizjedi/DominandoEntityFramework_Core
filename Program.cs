@@ -7,9 +7,17 @@ namespace modeloDeDados
     {
         static void Main(string[] args)
         {
-            FiltroGlobal();
+            // FiltroGlobal();
+            Collations();
         }
 
+        // Collations
+        static void Collations()
+        {
+            using var db = new Modelo_de_Dados.Data.ApplicationContext();
+            db.Database.EnsureDeleted();
+            db.Database.EnsureCreated();
+        }
         // Filtro Global
         static void FiltroGlobal()
         {

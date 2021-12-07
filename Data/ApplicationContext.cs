@@ -20,10 +20,25 @@ namespace Modelo_de_Dados.Data
                  .LogTo(Console.WriteLine, LogLevel.Information);
         }
 
-        // Filtra as consultas de forma global, de acordo a lógica solicitada
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // modelBuilder.Entity<Departamento>().HasQueryFilter(x => !x.Excluido);
+            // Aplica ao banco de dados com a configuração abaixo.
+            // LUIZ => luiz , com essa collation o EF_Core consegue realizar as buscas ignorando caixa alta e acentuação.
+            modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AI");
+
+            // Aplica a tabela de Departamento a configuração abaixo.
+            // LUIZ => luiz , com essa collation o EF_Core irá diferenciar as letras maiúsculas e os acentos no momento da busca.
+            modelBuilder.Entity<Departamento>().Property(p => p.Descricao).UseCollation("SQL_Latin1_General_CP1_CS_AS");
+
+            // Criando Sequências customizadas
+            modelBuilder.HasSequence<int>("MinhaSequencia", "sequencias")
+                     .StartsAt(1) // Inicia a sequência a partir do valor desejado
+                     .IncrementsBy(2) // Define quanto deverá ser incrementado a cada sequência
+                     .HasMin(1) // Define um valor mínimo para a sequência
+                     .HasMax(10) // Define um valor máximo para a sequência 
+                     .IsCyclic(); // Ao atingir o valor máximo esse método reinicia a contagem das sequências a partir do valor mínimo
+            modelBuilder.Entity<Departamento>().Property(p => p.Id).HasDefaultValueSql("NEXT VALUE FOR sequencias.MinhaSequencia");
+
         }
     }
 }
