@@ -107,3 +107,17 @@ info: 07/12/2021 11:59:03.541 RelationalEventId.CommandExecuted[20101] (Microsof
       SELECT [d].[Id], [d].[Ativo], [d].[Descricao], [d].[Excluido]
       FROM [Departamentos] AS [d]
       WHERE [d].[Id] > 0
+info: 07/12/2021 12:03:16.565 CoreEventId.ContextInitialized[10403] (Microsoft.EntityFrameworkCore.Infrastructure) 
+      Entity Framework Core 5.0.0 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+info: 07/12/2021 12:03:16.990 RelationalEventId.CommandExecuted[20101] (Microsoft.EntityFrameworkCore.Database.Command) 
+      Executed DbCommand (21ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT [d].[Id], [d].[Ativo], [d].[Descricao], [d].[Excluido]
+      FROM [Departamentos] AS [d]
+      WHERE [d].[Id] > 0
+fail: 07/12/2021 12:03:17.054 CoreEventId.QueryIterationFailed[10100] (Microsoft.EntityFrameworkCore.Query) 
+      An exception occurred while iterating over the results of a query for context type 'Infraestrutura.Data.ApplicationContext'.
+      System.InvalidCastException: Unable to cast object of type 'System.Boolean' to type 'System.Int32'.
+         at Microsoft.Data.SqlClient.SqlBuffer.get_Int32()
+         at Microsoft.Data.SqlClient.SqlDataReader.GetInt32(Int32 i)
+         at lambda_method5(Closure , QueryContext , DbDataReader , ResultContext , SingleQueryResultCoordinator )
+         at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
