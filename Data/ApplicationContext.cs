@@ -19,13 +19,8 @@ namespace Infraestrutura.Data
         {
             const string strConnection = "Data Source=GUIDE-LUIZJEDI;Initial Catalog=Jedi_Infraestrutura;Integrated Security=true;pooling=true";
             optionsBuilder
-                .UseSqlServer(strConnection)
+                .UseSqlServer(strConnection, x => x.MaxBatchSize(100))
                 .LogTo(Console.WriteLine, LogLevel.Information)
-                // .LogTo(Console.WriteLine, new[] { CoreEventId.ContextInitialized, RelationalEventId.CommandExecuted },
-                // LogLevel.Information,
-                // DbContextLoggerOptions.LocalTime | DbContextLoggerOptions.SingleLine);
-                // .LogTo(_writer.WriteLine, LogLevel.Information);
-                // .EnableDetailedErrors();
                 .EnableSensitiveDataLogging();
 
         }
