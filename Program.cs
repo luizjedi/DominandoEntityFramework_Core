@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Infraestrutura.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace infraestrutura
 {
@@ -11,7 +12,16 @@ namespace infraestrutura
             // FiltroGlobal();
             // ConsultarDepartamentos();
             // DadosSensiveis();
-            HabilitandoBatchSize();
+            // HabilitandoBatchSize();
+            TempoComandoGeral();
+        }
+
+        // Configurando o Timeout do comando global
+        static void TempoComandoGeral()
+        {
+            using var db = new Infraestrutura.Data.ApplicationContext();
+
+            db.Database.ExecuteSqlRaw("WAITFOR DELAY '00:00:07'; SELECT 1");
         }
 
         // Habilitando Batch Size

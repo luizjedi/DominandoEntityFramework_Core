@@ -19,7 +19,7 @@ namespace Infraestrutura.Data
         {
             const string strConnection = "Data Source=GUIDE-LUIZJEDI;Initial Catalog=Jedi_Infraestrutura;Integrated Security=true;pooling=true";
             optionsBuilder
-                .UseSqlServer(strConnection, x => x.MaxBatchSize(100))
+                .UseSqlServer(strConnection, x => x.MaxBatchSize(100).CommandTimeout(7)) // Batch Size permite personalizar 
                 .LogTo(Console.WriteLine, LogLevel.Information)
                 .EnableSensitiveDataLogging();
 
