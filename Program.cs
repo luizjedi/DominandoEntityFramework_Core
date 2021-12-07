@@ -7,7 +7,7 @@ namespace modeloDeDados
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            FiltroGlobal();
         }
 
         // Filtro Global
