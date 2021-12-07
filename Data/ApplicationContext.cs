@@ -18,8 +18,14 @@ namespace Infraestrutura.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             const string strConnection = "Data Source=GUIDE-LUIZJEDI;Initial Catalog=Jedi_Infraestrutura;Integrated Security=true;pooling=true";
+
             optionsBuilder
-                .UseSqlServer(strConnection, x => x.MaxBatchSize(100).CommandTimeout(7)) // Batch Size permite personalizar 
+                .UseSqlServer(
+                    strConnection,
+                        x => x
+                            .MaxBatchSize(100) // Batch Size permite personalizar
+                            .CommandTimeout(7)
+                            .EnableRetryOnFailure(4, TimeSpan.FromSeconds(10), null)) // Habilita a resiliência da aplicação
                 .LogTo(Console.WriteLine, LogLevel.Information)
                 .EnableSensitiveDataLogging();
 

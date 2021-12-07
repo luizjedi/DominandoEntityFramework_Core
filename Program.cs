@@ -13,9 +13,37 @@ namespace infraestrutura
             // ConsultarDepartamentos();
             // DadosSensiveis();
             // HabilitandoBatchSize();
-            TempoComandoGeral();
+            // TempoComandoGeral();
+            // TempoComandoPara1Fluxo();
+            ExecutarEstrategiaResiiencia();
         }
 
+        // Criando uma estratégia de resiliência
+        static void ExecutarEstrategiaResiiencia()
+        {
+            using var db = new Infraestrutura.Data.ApplicationContext();
+
+            var strategy = db.Database.CreateExecutionStrategy();
+            strategy.Execute(() =>
+            {
+                using var transaction = db.Database.BeginTransaction();
+
+                db.Departamentos.Add(new Departamento { Descricao = "Departamento Transação" });
+                db.SaveChanges();
+                db.ChangeTracker.Clear();
+
+                transaction.Commit();
+            });
+        }
+        // Configurando o Timeout do comando para um fluxo
+        static void TempoComandoPara1Fluxo()
+        {
+            using var db = new Infraestrutura.Data.ApplicationContext();
+
+            db.Database.SetCommandTimeout(10);
+
+            db.Database.ExecuteSqlRaw("WAITFOR DELAY '00:00:07'; SELECT 1");
+        }
         // Configurando o Timeout do comando global
         static void TempoComandoGeral()
         {
