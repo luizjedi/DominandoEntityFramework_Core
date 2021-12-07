@@ -1,6 +1,7 @@
 using System;
 using Infraestrutura.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 
 namespace Infraestrutura.Data
@@ -15,15 +16,11 @@ namespace Infraestrutura.Data
         {
             const string strConnection = "Data Source=GUIDE-LUIZJEDI;Initial Catalog=Jedi_Infraestrutura;Integrated Security=true;pooling=true";
             optionsBuilder
-                 .UseSqlServer(strConnection)
-                 .EnableSensitiveDataLogging()
-                 .LogTo(Console.WriteLine, LogLevel.Information);
-        }
-
-        // Filtra as consultas de forma global, de acordo a lógica solicitada
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            // modelBuilder.Entity<Departamento>().HasQueryFilter(x => !x.Excluido);
+                .UseSqlServer(strConnection)
+                // .LogTo(Console.WriteLine, LogLevel.Information);
+                .LogTo(Console.WriteLine, new[] { CoreEventId.ContextInitialized, RelationalEventId.CommandExecuted },
+                LogLevel.Information,
+                DbContextLoggerOptions.LocalTime | DbContextLoggerOptions.SingleLine);
         }
     }
 }

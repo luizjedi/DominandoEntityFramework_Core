@@ -7,9 +7,16 @@ namespace infraestrutura
     {
         static void Main(string[] args)
         {
-            FiltroGlobal();
+            // FiltroGlobal();
+            ConsultarDepartamentos();
         }
 
+        static void ConsultarDepartamentos()
+        {
+            using var db = new Infraestrutura.Data.ApplicationContext();
+
+            var departamentos = db.Departamentos.Where(x => x.Id > 0).ToArray();
+        }
         // Filtro Global
         static void FiltroGlobal()
         {
