@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace modeloDeDados
 {
@@ -8,9 +9,20 @@ namespace modeloDeDados
         static void Main(string[] args)
         {
             // FiltroGlobal();
-            Collations();
+            // Collations();
+            PropagarDados();
         }
 
+        // Propagação de dados
+        static void PropagarDados()
+        {
+            using var db = new Modelo_de_Dados.Data.ApplicationContextIndice();
+            db.Database.EnsureDeleted();
+            db.Database.EnsureCreated();
+
+            var script = db.Database.GenerateCreateScript();
+            Console.WriteLine(script);
+        }
         // Collations
         static void Collations()
         {
