@@ -10,9 +10,20 @@ namespace modeloDeDados
         {
             // FiltroGlobal();
             // Collations();
-            PropagarDados();
+            // PropagarDados();
+            Esquema();
         }
 
+        // Esquema
+        static void Esquema()
+        {
+            using var db = new Modelo_de_Dados.Data.ApplicationContextIndice();
+            db.Database.EnsureDeleted();
+            db.Database.EnsureCreated();
+
+            var script = db.Database.GenerateCreateScript();
+            Console.WriteLine(script);
+        }
         // Propagação de dados
         static void PropagarDados()
         {

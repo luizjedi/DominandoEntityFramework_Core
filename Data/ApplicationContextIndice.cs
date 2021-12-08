@@ -30,11 +30,14 @@ namespace Modelo_de_Dados.Data
             //     .HasFilter("Descricao IS NOT NULL")
             //     .HasFillFactor(80)
             //     .IsUnique();
-            modelBuilder.Entity<Estado>().HasData(new[]
-            {
-                new Estado { Id = 1, Nome = "Piauí"},
-                new Estado { Id = 2, Nome = "Sergipe"},
-            });
+            // modelBuilder.Entity<Estado>().HasData(new[]
+            // {
+            //     new Estado { Id = 1, Nome = "Piauí"},
+            //     new Estado { Id = 2, Nome = "Sergipe"},
+            // });
+            modelBuilder.HasDefaultSchema("cadastros");
+
+            modelBuilder.Entity<Estado>().ToTable("Estados", "Segundo esquema");
         }
     }
 }
