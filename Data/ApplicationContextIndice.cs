@@ -1,7 +1,9 @@
 using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using Modelo_de_Dados.Domain;
+using static Modelo_de_Dados.Enums._Versao;
 
 namespace Modelo_de_Dados.Data
 {
@@ -10,6 +12,8 @@ namespace Modelo_de_Dados.Data
         public DbSet<Departamento> Departamentos { get; set; }
         public DbSet<Funcionario> Funcionarios { get; set; }
         public DbSet<Estado> Estados { get; set; }
+        public DbSet<Conversor> Conversores { get; set; }
+
 
         //Configura a string de conexão
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -35,9 +39,24 @@ namespace Modelo_de_Dados.Data
             //     new Estado { Id = 1, Nome = "Piauí"},
             //     new Estado { Id = 2, Nome = "Sergipe"},
             // });
-            modelBuilder.HasDefaultSchema("cadastros");
+            // modelBuilder.HasDefaultSchema("cadastros");
+            // modelBuilder.Entity<Conversor>().ToTable("Estados", "Segundo esquema");
 
-            modelBuilder.Entity<Estado>().ToTable("Estados", "Segundo esquema");
+            var conversao = new ValueConverter<Versao, string>(x => x.ToString(), x => (Versao)Enum.Parse(typeof(Versao), x));
+            // Microsoft.EntityFrameworkCore.Storage.ValueConversion.
+
+            var conversao1 = new EnumToStringConverter<Versao>();
+
+            modelBuilder.Entity<Conversor>()
+                    .Property(p => p.Versao)
+                    .HasConversion(conversao1);
+            // .HasConversion(conversao);
+            // .HasConversion(x => x.ToString(), x => (Versao)Enum.Parse(typeof(Versao), x));
+            // .HasConversion<string>();
+
+            modelBuilder.Entity<Conversor>()
+                    .Property(p => p.Status)
+                    .HasConversion(new Modelo_de_Dados.Conversores.ConversorCustomizado());
         }
     }
 }

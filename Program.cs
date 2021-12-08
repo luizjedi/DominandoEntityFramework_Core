@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using static Modelo_de_Dados.Enums._Status;
 
 namespace modeloDeDados
 {
@@ -11,9 +12,32 @@ namespace modeloDeDados
             // FiltroGlobal();
             // Collations();
             // PropagarDados();
-            Esquema();
+            // Esquema();
+            // ConversorDeValor();
+            ConversorCustomizado();
         }
 
+        // Criando um conversor customizado
+        static void ConversorCustomizado()
+        {
+            using var db = new Modelo_de_Dados.Data.ApplicationContextIndice();
+            db.Database.EnsureDeleted();
+            db.Database.EnsureCreated();
+
+            db.Conversores.Add(
+                new Modelo_de_Dados.Domain.Conversor
+                {
+                    Status = Status.Devolvido,
+                });
+            db.SaveChanges();
+            db.ChangeTracker.Clear();
+
+            var conversorEmAnalise = db.Conversores.AsNoTracking().FirstOrDefault(x => x.Status == Status.Analise);
+
+            var conversorDevolvido = db.Conversores.AsNoTracking().FirstOrDefault(x => x.Status == Status.Devolvido);
+        }
+        // Conversores de valor
+        static void ConversorDeValor() => Esquema();
         // Esquema
         static void Esquema()
         {
