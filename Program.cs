@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Modelo_de_Dados.Domain;
 using static Modelo_de_Dados.Enums._Status;
 
 namespace modeloDeDados
@@ -14,9 +15,39 @@ namespace modeloDeDados
             // PropagarDados();
             // Esquema();
             // ConversorDeValor();
-            ConversorCustomizado();
+            // ConversorCustomizado();
+            // PropriedadesDeSombra();
+            TrabalhandoComPropriedadesDeSombra();
         }
 
+        // Utilizando Shadow Properties
+        static void TrabalhandoComPropriedadesDeSombra()
+        {
+            using var db = new Modelo_de_Dados.Data.ApplicationContextIndice();
+            // db.Database.EnsureDeleted();
+            // db.Database.EnsureCreated();
+
+            // var departamento = new Departamento
+            // {
+            //     Descricao = "Departamento Propriedade de Sombra"
+            // };
+
+            // db.Departamentos.Add(departamento);
+
+            // db.Entry(departamento).Property("UltimaAtualizacao").CurrentValue = DateTime.Now;
+
+            // db.SaveChanges();
+            // db.ChangeTracker.Clear();
+
+            var departamentos = db.Departamentos.Where(x => EF.Property<DateTime>(x, "UltimaAtualizacao") < DateTime.Now).ToArray();
+        }
+        // Utilizando Shadow Properties
+        static void PropriedadesDeSombra()
+        {
+            using var db = new Modelo_de_Dados.Data.ApplicationContextIndice();
+            db.Database.EnsureDeleted();
+            db.Database.EnsureCreated();
+        }
         // Criando um conversor customizado
         static void ConversorCustomizado()
         {

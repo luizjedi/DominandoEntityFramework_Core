@@ -57,6 +57,8 @@ namespace Modelo_de_Dados.Data
             modelBuilder.Entity<Conversor>()
                     .Property(p => p.Status)
                     .HasConversion(new Modelo_de_Dados.Conversores.ConversorCustomizado());
+
+            modelBuilder.Entity<Departamento>().Property<DateTime>("UltimaAtualizacao"); // Configura uma Shadow Propertie
         }
     }
 }
