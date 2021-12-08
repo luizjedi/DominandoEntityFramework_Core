@@ -14,7 +14,7 @@ namespace modeloDeDados
         // Collations
         static void Collations()
         {
-            using var db = new Modelo_de_Dados.Data.ApplicationContext();
+            using var db = new Modelo_de_Dados.Data.ApplicationContextIndice();
             db.Database.EnsureDeleted();
             db.Database.EnsureCreated();
         }
