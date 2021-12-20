@@ -1,7 +1,9 @@
 using System;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
+using Modelo_de_Dados.Configurations;
 using Modelo_de_Dados.Domain;
 using static Modelo_de_Dados.Enums._Versao;
 
@@ -14,6 +16,9 @@ namespace Modelo_de_Dados.Data
         public DbSet<Estado> Estados { get; set; }
         public DbSet<Conversor> Conversores { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
+
+        public DbSet<Ator> Atores { get; set; }
+        public DbSet<Filme> Filmes { get; set; }
 
 
         //Configura a string de conexão
@@ -28,10 +33,22 @@ namespace Modelo_de_Dados.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Cliente>(p =>
-            {
-                p.OwnsOne(x => x.Endereco);
-            });
+            // modelBuilder.ApplyConfiguration(new ClienteConfiguration());
+            // modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationContextIndice).Assembly);
+
+            // modelBuilder.Entity<Cliente>(p =>
+            // {
+            //     p.OwnsOne(x => x.Endereco, end =>
+            //     {
+            //         end.Property(x => x.Bairro).HasColumnName("Bairro"); // Personaliza o nome a ser criado na tabela do banco de dados
+            //         end.Property(x => x.Logradouro).HasColumnName("Logradouro");
+            //         end.Property(x => x.Cidade).HasColumnName("Cidade");
+            //         end.Property(x => x.Estado).HasColumnName("Estado");
+
+            //         end.ToTable("Endereco");
+            //     });
+            // });
             // modelBuilder
             //     .Entity<Departamento>()
             //     .HasIndex(x => new { x.Descricao, x.Ativo })

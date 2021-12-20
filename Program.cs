@@ -17,9 +17,118 @@ namespace modeloDeDados
             // ConversorDeValor();
             // ConversorCustomizado();
             // PropriedadesDeSombra();
-            TrabalhandoComPropriedadesDeSombra();
+            //TrabalhandoComPropriedadesDeSombra();
+            // TiposDePropriedades();
+            // Relacionamento1Para1();
+            // Relacionamento1ParaMuitos();
+            RelacionamentoMuitosParaMuitos();
         }
 
+        // Relacionamento muitos para muitos
+        static void RelacionamentoMuitosParaMuitos()
+        {
+            using (var db = new Modelo_de_Dados.Data.ApplicationContextIndice())
+            {
+                db.Database.EnsureDeleted();
+                db.Database.EnsureCreated();
+
+                var ator1 = new Ator { Nome = "Keanu Reeves" };
+                var ator2 = new Ator { Nome = "Tom Cruise" };
+                var ator3 = new Ator { Nome = "Johnny Depp" };
+
+                var filme1 = new Filme { Descricao = "Matrix 3" };
+                var filme3 = new Filme { Descricao = "Missão Impossível" };
+                var filme2 = new Filme { Descricao = "Matrix 4" };
+
+                ator1.Filmes.Add(filme1);
+                ator1.Filmes.Add(filme2);
+
+                ator2.Filmes.Add(filme1);
+
+                filme3.Atores.Add(ator1);
+                filme3.Atores.Add(ator2);
+                filme3.Atores.Add(ator3);
+
+                db.AddRange(ator1, ator2, filme3);
+
+                db.SaveChanges();
+                db.ChangeTracker.Clear();
+
+                foreach (var ator in db.Atores)
+                {
+                    Console.WriteLine($"Ator: {ator.Nome}");
+
+                    foreach (var filme in ator.Filmes)
+                    {
+                        Console.WriteLine($"\t Filme: {filme.Descricao}");
+                    }
+                }
+            }
+        }
+        // Relacionamento 1 para muitos
+        static void Relacionamento1ParaMuitos()
+        {
+            using (var db = new Modelo_de_Dados.Data.ApplicationContextIndice())
+            {
+                db.Database.EnsureDeleted();
+                db.Database.EnsureCreated();
+
+                var estado = new Estado
+                {
+                    Nome = "Sergipe",
+                    Governador = new Governador { Nome = "Luiz Felipe de Oliveira" }
+                };
+
+                estado.Cidades.Add(new Cidade { Nome = "Itabaiana" });
+
+                db.Estados.Add(estado);
+                db.SaveChanges();
+            }
+
+            using (var db = new Modelo_de_Dados.Data.ApplicationContextIndice())
+            {
+                var estados = db.Estados.ToList();
+
+                estados[0].Cidades.Add(new Cidade { Nome = "Aracajú" });
+
+                db.SaveChanges();
+                db.ChangeTracker.Clear();
+
+                foreach (var est in db.Estados.Include(p => p.Cidades).AsNoTracking())
+                {
+                    Console.WriteLine($"Estado: {est.Nome}, Governador: {est.Governador.Nome}");
+
+                    foreach (var cid in est.Cidades)
+                    {
+                        Console.WriteLine($"\t Cidade: {cid.Nome}");
+                    }
+                }
+            }
+        }
+        // Relacionamento 1 para 1
+        static void Relacionamento1Para1()
+        {
+            using var db = new Modelo_de_Dados.Data.ApplicationContextIndice();
+            db.Database.EnsureDeleted();
+            db.Database.EnsureCreated();
+
+            var estado = new Estado
+            {
+                Nome = "Sergipe",
+                Governador = new Governador { Nome = "Luiz Felipe de Oliveira" }
+            };
+
+            db.Estados.Add(estado);
+            db.SaveChanges();
+            db.ChangeTracker.Clear();
+
+            var estados = db.Estados.AsNoTracking().ToList();
+
+            estados.ForEach(est =>
+            {
+                Console.WriteLine($"Estado: {est.Nome}, Governador: {est.Governador.Nome}");
+            });
+        }
         // Tipos de Propriedades
         static void TiposDePropriedades()
         {
@@ -48,7 +157,6 @@ namespace modeloDeDados
                 Console.WriteLine(json);
             });
         }
-
         // Utilizando Shadow Properties
         static void TrabalhandoComPropriedadesDeSombra()
         {
