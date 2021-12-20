@@ -20,6 +20,35 @@ namespace modeloDeDados
             TrabalhandoComPropriedadesDeSombra();
         }
 
+        // Tipos de Propriedades
+        static void TiposDePropriedades()
+        {
+            using var db = new Modelo_de_Dados.Data.ApplicationContextIndice();
+            db.Database.EnsureDeleted();
+            db.Database.EnsureCreated();
+
+            var cliente = new Cliente
+            {
+                Nome = "Hanna de Oliveira",
+                Telefone = "(34) 99874-7894",
+                Endereco = new Endereco { Bairro = "Centro", Cidade = "São Paulo" }
+            };
+
+            db.Clientes.Add(cliente);
+            db.SaveChanges();
+            db.ChangeTracker.Clear();
+
+            var clientes = db.Clientes.AsNoTracking().ToList();
+
+            var options = new System.Text.Json.JsonSerializerOptions { WriteIndented = true };
+
+            clientes.ForEach(cli =>
+            {
+                var json = System.Text.Json.JsonSerializer.Serialize(cli, options);
+                Console.WriteLine(json);
+            });
+        }
+
         // Utilizando Shadow Properties
         static void TrabalhandoComPropriedadesDeSombra()
         {

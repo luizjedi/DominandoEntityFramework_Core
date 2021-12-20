@@ -13,6 +13,7 @@ namespace Modelo_de_Dados.Data
         public DbSet<Funcionario> Funcionarios { get; set; }
         public DbSet<Estado> Estados { get; set; }
         public DbSet<Conversor> Conversores { get; set; }
+        public DbSet<Cliente> Clientes { get; set; }
 
 
         //Configura a string de conexão
@@ -27,6 +28,10 @@ namespace Modelo_de_Dados.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Cliente>(p =>
+            {
+                p.OwnsOne(x => x.Endereco);
+            });
             // modelBuilder
             //     .Entity<Departamento>()
             //     .HasIndex(x => new { x.Descricao, x.Ativo })
@@ -42,23 +47,23 @@ namespace Modelo_de_Dados.Data
             // modelBuilder.HasDefaultSchema("cadastros");
             // modelBuilder.Entity<Conversor>().ToTable("Estados", "Segundo esquema");
 
-            var conversao = new ValueConverter<Versao, string>(x => x.ToString(), x => (Versao)Enum.Parse(typeof(Versao), x));
+            // var conversao = new ValueConverter<Versao, string>(x => x.ToString(), x => (Versao)Enum.Parse(typeof(Versao), x));
             // Microsoft.EntityFrameworkCore.Storage.ValueConversion.
 
-            var conversao1 = new EnumToStringConverter<Versao>();
+            // var conversao1 = new EnumToStringConverter<Versao>();
 
-            modelBuilder.Entity<Conversor>()
-                    .Property(p => p.Versao)
-                    .HasConversion(conversao1);
+            // modelBuilder.Entity<Conversor>()
+            //         .Property(p => p.Versao)
+            //         .HasConversion(conversao1);
             // .HasConversion(conversao);
             // .HasConversion(x => x.ToString(), x => (Versao)Enum.Parse(typeof(Versao), x));
             // .HasConversion<string>();
 
-            modelBuilder.Entity<Conversor>()
-                    .Property(p => p.Status)
-                    .HasConversion(new Modelo_de_Dados.Conversores.ConversorCustomizado());
+            // modelBuilder.Entity<Conversor>()
+            //         .Property(p => p.Status)
+            //         .HasConversion(new Modelo_de_Dados.Conversores.ConversorCustomizado());
 
-            modelBuilder.Entity<Departamento>().Property<DateTime>("UltimaAtualizacao"); // Configura uma Shadow Propertie
+            // modelBuilder.Entity<Departamento>().Property<DateTime>("UltimaAtualizacao"); // Configura uma Shadow Propertie
         }
     }
 }
