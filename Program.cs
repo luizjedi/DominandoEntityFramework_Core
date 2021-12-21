@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAnnotations
 {
@@ -7,7 +8,19 @@ namespace DataAnnotations
     {
         static void Main(string[] args)
         {
-            FiltroGlobal();
+            // FiltroGlobal();
+            AtributoTable();
+        }
+
+        // Atributo Table
+        static void AtributoTable()
+        {
+            using (var db = new Atributos.Data.ApplicationContext())
+            {
+                var script = db.Database.GenerateCreateScript();
+
+                Console.WriteLine(script);
+            }
         }
 
         // Filtro Global
