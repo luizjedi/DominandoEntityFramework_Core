@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Atributos.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAnnotations
@@ -9,7 +10,31 @@ namespace DataAnnotations
         static void Main(string[] args)
         {
             // FiltroGlobal();
-            AtributoTable();
+            // AtributoTable();
+            AtributoDatabaseGenerated();
+        }
+
+        // Atributo DatabaseGenerated
+        static void AtributoDatabaseGenerated()
+        {
+            using (var db = new Atributos.Data.ApplicationContext())
+            {
+                db.Database.EnsureDeleted();
+                db.Database.EnsureCreated();
+
+                var script = db.Database.GenerateCreateScript();
+
+                Console.WriteLine(script);
+
+                db.Atributos.Add(new Atributo
+                {
+                    Descricao = "Exemplo",
+                    Observacao = "Observation"
+                });
+
+                db.SaveChanges();
+                db.ChangeTracker.Clear();
+            }
         }
 
         // Atributo Table
@@ -22,7 +47,6 @@ namespace DataAnnotations
                 Console.WriteLine(script);
             }
         }
-
         // Filtro Global
         static void FiltroGlobal()
         {

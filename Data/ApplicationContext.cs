@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Atributos.Data
 {
-    public class ApplicationContext: DbContext
+    public class ApplicationContext : DbContext
     {
         public DbSet<Departamento> Departamentos { get; set; }
         public DbSet<Funcionario> Funcionarios { get; set; }
@@ -14,6 +14,7 @@ namespace Atributos.Data
 
         public DbSet<Dictionary<string, object>> Configuracoes => Set<Dictionary<string, object>>("Conficurações");
 
+        public DbSet<Aeroporto> Aeroportos { get; set; }
         //Configura a string de conexão
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
