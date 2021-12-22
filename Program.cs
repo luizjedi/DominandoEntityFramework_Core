@@ -10,9 +10,61 @@ namespace ef_functions
         static void Main(string[] args)
         {
             // FiltroGlobal();
-            FuncoesDeDatas();
+            // FuncoesDeDatas();
+            // FuncaoLike();
+            FuncaoDataLength();
         }
 
+        // Função Data Length
+        // Função Like
+        static void FuncaoDataLength()
+        {
+            using (var db = new EF_Functions.Data.ApplicationContext())
+            {
+                var resultado = db.Funcoes
+                              .AsNoTracking()
+                              .Select(p =>
+                                new
+                                {
+                                    TotalBytesCampoData = EF.Functions.DataLength(p.Data1),
+                                    TotalBytes1 = EF.Functions.DataLength(p.Descricao1),
+                                    TotalBytes2 = EF.Functions.DataLength(p.Descricao2),
+                                    Total1 = p.Descricao1.Length,
+                                    Total2 = p.Descricao2.Length
+                                })
+                                .FirstOrDefault();
+
+                Console.WriteLine("Resultado:");
+                Console.WriteLine(resultado);
+            }
+        }
+        // Função Like
+        static void FuncaoLike()
+        {
+            using (var db = new EF_Functions.Data.ApplicationContext())
+            {
+                var script = db.Database.GenerateCreateScript();
+
+                Console.WriteLine(script);
+
+                var dados = db.Funcoes
+                              .AsNoTracking()
+                              // %X consulta somente a parte final
+                              // X% consulta somente a parte inicial
+                              // %X% consulta todo o atributo
+                              //   .Where(p => EF.Functions.Like(p.Descricao1, "%Bo%")) 
+                              .Where(p => EF.Functions.Like(p.Descricao1, "B[ao]%")) // permite consulta de caracteres coringa
+                              .Select(p => p.Descricao1)
+                              .ToArray();
+
+                Console.WriteLine("Resultado:");
+
+                foreach (var descricao in dados)
+                {
+                    Console.WriteLine(descricao);
+                }
+            }
+        }
         // Funções de Datas 
         static void FuncoesDeDatas()
         {

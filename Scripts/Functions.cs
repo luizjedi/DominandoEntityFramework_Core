@@ -17,8 +17,8 @@ namespace EF_Functions.Scripts
                     {
                         Data1 = DateTime.Now.AddDays(2),
                         Data2 = "2021-01-01",
-                        Descricao1 = "Bala 1",
-                        Descricao2 = "Bala 1"
+                        Descricao1 = "Bala 1 ",
+                        Descricao2 = "Bala 1 "
                     },
                     new Funcao
                     {
