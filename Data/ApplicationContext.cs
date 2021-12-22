@@ -1,23 +1,20 @@
 using System;
-using System.Collections.Generic;
-using ef_functions.Domain;
+using EF_Functions.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace ef_functions.Data
+namespace EF_Functions.Data
 {
     public class ApplicationContext : DbContext
     {
+        public DbSet<Funcao> Funcoes { get; set; }
         public DbSet<Departamento> Departamentos { get; set; }
-        public DbSet<Funcionario> Funcionarios { get; set; }
-        public DbSet<Atributo> Atributos { get; set; }
 
-        public DbSet<Dictionary<string, object>> Configuracoes => Set<Dictionary<string, object>>("Conficurações");
 
         //Configura a string de conexão
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            const string strConnection = "Data Source=GUIDE-LUIZJEDI;Initial Catalog=Jedi_Atributos;Integrated Security=true;pooling=true";
+            const string strConnection = "Data Source=GUIDE-LUIZJEDI;Initial Catalog=Jedi_EF_Functions;Integrated Security=true;pooling=true";
             optionsBuilder
                  .UseSqlServer(strConnection)
                  .EnableSensitiveDataLogging()
@@ -29,20 +26,6 @@ namespace ef_functions.Data
             // modelBuilder.ApplyConfiguration(new ClienteConfiguration());
             // modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
-
-            // Sacola de Propriedade (Property Bags)
-            modelBuilder.SharedTypeEntity<Dictionary<string, object>>("Configurações", b =>
-            {
-                b.Property<int>("Id");
-
-                b.Property<string>("Chave")
-                        .HasColumnType("VARCHAR(40)")
-                        .IsRequired();
-
-                b.Property<string>("Valor")
-                        .HasColumnType("VARCHAR(255)")
-                        .IsRequired(); ;
-            });
         }
     }
 }

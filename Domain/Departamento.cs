@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ef_functions.Domain
+namespace EF_Functions.Domain
 {
     public class Departamento
     {
