@@ -12,11 +12,50 @@ namespace ef_functions
             // FiltroGlobal();
             // FuncoesDeDatas();
             // FuncaoLike();
-            FuncaoDataLength();
+            // FuncaoDataLength();
+            // FuncaoProperty();
+            FuncaoCollate();
         }
 
+        // Função Collate
+        static void FuncaoCollate()
+        {
+            using (var db = new EF_Functions.Data.ApplicationContext())
+            {
+                var consulta1 = db
+                            .Funcoes
+                            .FirstOrDefault(p => EF.Functions.Collate(p.Descricao1, "SQL_Latin1_General_CP1_CS_AS") == "Tela"); // Case Sensitive e Sensível a acentuação
+
+                var consulta2 = db
+                            .Funcoes
+                            .FirstOrDefault(p => EF.Functions.Collate(p.Descricao1, "SQL_Latin1_General_CP1_CI_AS") == "tela"); // Sensível a acentuação somente
+
+                Console.WriteLine($"Consulta1: {consulta1?.Descricao1}");
+                Console.WriteLine($"Consulta2: {consulta2?.Descricao2}");
+            }
+        }
+        // Função Property
+        static void FuncaoProperty()
+        {
+            Functions.ApagarCriarBancoDeDados();
+
+            using (var db = new EF_Functions.Data.ApplicationContext())
+            {
+                var resultado = db
+                            .Funcoes
+                            // .AsNoTracking() // Consulta não rastreada
+                            .FirstOrDefault(p => EF.Property<string>(p, "Propriedade_de_Sombra") == "Teste");
+
+                var propriedadeDeSombra = db
+                            .Entry(resultado)
+                            .Property<string>("Propriedade_de_Sombra")
+                            .CurrentValue;
+
+                Console.WriteLine("Resultado:");
+                Console.WriteLine(propriedadeDeSombra);
+            }
+        }
         // Função Data Length
-        // Função Like
         static void FuncaoDataLength()
         {
             using (var db = new EF_Functions.Data.ApplicationContext())

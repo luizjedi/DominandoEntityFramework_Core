@@ -23,9 +23,13 @@ namespace EF_Functions.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // modelBuilder.ApplyConfiguration(new ClienteConfiguration());
-            // modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
+            modelBuilder
+                    .Entity<Funcao>(conf =>
+                    {
+                        conf.Property<string>("Propriedade_de_Sombra") // Shadow property name
+                            .HasColumnType("VARCHAR(100)") // Tipo da propriedade
+                            .HasDefaultValueSql("'Teste'"); // Valor padrão a ser inserido no banco de dados
+                    });
         }
     }
 }
