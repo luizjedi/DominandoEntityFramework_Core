@@ -1,4 +1,4 @@
-namespace interceptacao.Domain
+namespace Interceptacao.Domain
 {
     public class Funcionario
     {

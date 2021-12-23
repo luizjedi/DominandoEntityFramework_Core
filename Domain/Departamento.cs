@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace interceptacao.Domain
+namespace Interceptacao.Domain
 {
     public class Departamento
     {

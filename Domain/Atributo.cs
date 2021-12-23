@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace interceptacao.Domain
+namespace Interceptacao.Domain
 {
     [Table("TabelaAtributos")]
     [Index(nameof(Descricao), nameof(Id), IsUnique = true)]

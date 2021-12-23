@@ -1,12 +1,14 @@
 using System;
-using interceptacao.Domain;
+using Interceptacao.Domain;
+using Interceptacao.Interceptadores;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace interceptacao.Data
+namespace Interceptacao.Data
 {
     public class ApplicationContext : DbContext
     {
+        public DbSet<Funcao> Funcoes { get; set; }
         public DbSet<Departamento> Departamentos { get; set; }
 
 
@@ -17,12 +19,15 @@ namespace interceptacao.Data
             optionsBuilder
                  .UseSqlServer(strConnection)
                  .EnableSensitiveDataLogging()
+                 .AddInterceptors(new InterceptadorDeComandos())
+                 .AddInterceptors(new InterceptadorDeConexao())
+                 .AddInterceptors(new InterceptadorDePersistencia())
                  .LogTo(Console.WriteLine, LogLevel.Information);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+
         }
     }
 }
