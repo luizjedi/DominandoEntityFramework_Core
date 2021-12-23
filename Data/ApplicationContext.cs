@@ -7,9 +7,8 @@ namespace Transacoes.Data
 {
     public class ApplicationContext : DbContext
     {
-        public DbSet<Funcao> Funcoes { get; set; }
+        public DbSet<Livro> Livros { get; set; }
         public DbSet<Departamento> Departamentos { get; set; }
-
 
         //Configura a string de conexão
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -19,11 +18,6 @@ namespace Transacoes.Data
                  .UseSqlServer(strConnection)
                  .EnableSensitiveDataLogging()
                  .LogTo(Console.WriteLine, LogLevel.Information);
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-
         }
     }
 }
