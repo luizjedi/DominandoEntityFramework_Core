@@ -8,7 +8,6 @@ namespace Transacoes.Data
     public class ApplicationContext : DbContext
     {
         public DbSet<Livro> Livros { get; set; }
-        public DbSet<Departamento> Departamentos { get; set; }
 
         //Configura a string de conexão
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
