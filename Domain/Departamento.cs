@@ -9,6 +9,8 @@ namespace performance.Domain
         public bool Ativo { get; set; }
         public bool Excluido { get; set; }
 
+        public byte[] Imagem { get; set; }
+
         public List<Funcionario> Funcionarios { get; set; }
     }
 }

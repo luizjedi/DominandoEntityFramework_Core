@@ -16,6 +16,7 @@ namespace performance.Data
 
             optionsBuilder
                 .UseSqlServer(strConnection)
+                //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution) // Desabilitando o rastreamento das consultas de forma global
                 .EnableSensitiveDataLogging()
                 .LogTo(Console.WriteLine, LogLevel.Information);
         }
