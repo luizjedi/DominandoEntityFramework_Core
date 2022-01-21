@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ksq3mk6ZoUoJovxrU6+TpbODm5lPhvhTAY9poJUGjVg5omTU05HBaO16DdX2gYDJEIzaNpPBdgaV3SNVNoRT/A==",
+  "dgSpecHash": "xA+rc+EsETfhG4kvaVAGxr0D5CsRIYI3GveXnDODp0qOVRfEQFBidmwbE/b5h33ZjgaXctiw+JWY9vXnOWPA5w==",
   "success": true,
   "projectFilePath": "C:\\Projetos\\LuizJedi\\Dominando Entity Framework\\MultiTenant\\src\\EFCore.MultiTenant.csproj",
   "expectedPackageFiles": [
