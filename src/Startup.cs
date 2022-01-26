@@ -1,10 +1,14 @@
 using EFCore.MultiTenant.Data;
 using EFCore.MultiTenant.Data.Interceptors;
+using EFCore.MultiTenant.Data.ModelFactory;
+using EFCore.MultiTenant.Extensions;
 using EFCore.MultiTenant.Middlewares;
 using EFCore.MultiTenant.Provider;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -34,19 +38,54 @@ namespace EFCore.MultiTenant
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EFCore.MultiTenant", Version = "v1" });
             });
 
-            services.AddScoped<StrategySchemaInterceptor>();
+            // Estrategia 1 - Identificador na Tabela
 
-            services.AddDbContext<ApplicationContext>((provider, options) =>
+            //services.AddScoped<StrategySchemaInterceptor>();
+
+            //services.AddDbContext<ApplicationContext>((provider, options) =>
+            //{
+            //    const string strConnection = "Data Source=GUIDE-LUIZJEDI;Initial Catalog=Jedi_MultiTenant;Integrated Security=true;pooling=true";
+            //    options
+            //        .UseSqlServer(strConnection)
+            //        .EnableSensitiveDataLogging()
+            //        .LogTo(Console.WriteLine, LogLevel.Information);
+
+            // Estrategia 2 - Schema
+
+            //services.AddDbContext<ApplicationContext>((provider, options) =>
+            //{
+            //    const string strConnection = "Data Source=GUIDE-LUIZJEDI;Initial Catalog=Jedi_MultiTenant;Integrated Security=true;pooling=true";
+            //    options
+            //        .UseSqlServer(strConnection)
+            //        .EnableSensitiveDataLogging()
+            //        .ReplaceService<IModelCacheKeyFactory, StrategySchemaModelCacheKey>()
+            //        .LogTo(Console.WriteLine, LogLevel.Information);
+
+            //var interceptor = provider.GetRequiredService<StrategySchemaInterceptor>();
+            //options.AddInterceptors(interceptor);
+            //});
+
+            // Estrategia 3 - Banco de Dados
+
+            services.AddHttpContextAccessor();
+
+            services.AddScoped<ApplicationContext>(provider =>
             {
-                const string strConnection = "Data Source=GUIDE-LUIZJEDI;Initial Catalog=Jedi_MultiTenant;Integrated Security=true;pooling=true";
-                options
-                    .UseSqlServer(strConnection)
-                    .EnableSensitiveDataLogging()
-                    .LogTo(Console.WriteLine, LogLevel.Information);
+                var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
 
-                var interceptor = provider.GetRequiredService<StrategySchemaInterceptor>();
+                var httpContext = provider.GetService<IHttpContextAccessor>()?.HttpContext;
 
-                options.AddInterceptors(interceptor);
+                var tenantId = httpContext?.GetTenantId();
+
+                //var connectionString = Configuration.GetConnectionString(tenantId);
+                var connectionString = Configuration.GetConnectionString("custom").Replace("Jedi_DATABASE", tenantId);
+
+                optionsBuilder
+                    .UseSqlServer(connectionString)
+                    .LogTo(Console.WriteLine, LogLevel.Information)
+                    .EnableSensitiveDataLogging();
+
+                return new ApplicationContext(optionsBuilder.Options);
             });
         }
 
@@ -68,7 +107,7 @@ namespace EFCore.MultiTenant
 
             app.UseAuthorization();
 
-            app.UseMiddleware<TenantMiddleware>();
+            //app.UseMiddleware<TenantMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

@@ -16,8 +16,8 @@ namespace EFCore.MultiTenant.Data.Interceptors
         private void ReplaceSchema(DbCommand command)
         {
             command.CommandText = command.CommandText
-                .Replace("FROM ", $" FROM {_tenantData.TenantId}.")
-                .Replace("JOIN ", $" JOIN {_tenantData.TenantId}.");
+                .Replace("FROM ", $" FROM [{_tenantData.TenantId}].")
+                .Replace("JOIN ", $" JOIN [{_tenantData.TenantId}].");
         }
 
         public override InterceptionResult<DbDataReader> ReaderExecuting(DbCommand command, CommandEventData eventData, InterceptionResult<DbDataReader> result)

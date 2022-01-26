@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\Controllers",
+    "\\src\\Data",
+    "\\src\\Data\\Interceptors",
+    "\\src\\Extensions",
+    "\\src\\Migrations"
+  ],
+  "SelectedNode": "\\src\\Startup.cs",
+  "PreviewInSolutionExplorer": false
+}
