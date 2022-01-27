@@ -5,8 +5,8 @@ namespace EFCore.UoWRepository.Data
 {
     public class ApplicationContext : DbContext
     {
-        public DbSet<Departamento> Departamentos { get; set; }
-        public DbSet<Colaborador> Colaboradores { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Colaborator> Colaborators { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {

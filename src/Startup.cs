@@ -22,15 +22,24 @@ namespace EFCore.UoWRepository
 
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddControllers();
+            services.AddControllers()
+                    .AddNewtonsoftJson(options =>
+                    {
+                        // Ignora referências cíclicas no formato Json
+                        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EFCore.UoWRepository", Version = "v1" });
             });
 
             services.AddDbContext<ApplicationContext>(prov =>
-            prov.UseSqlServer("Data Source=GUIDE-LUIZJEDI;Initial Catalog=Jedi_UoWRepository;Integrated Security=true;pooling=true"));
+                 prov.UseSqlServer("Data Source=GUIDE-LUIZJEDI;Initial Catalog=Jedi_UoWRepository;Integrated Security=true;pooling=true"));
+
+            #region "Injection Dependency"
+            var injectionContainer = new InjectionContainer(services);
+            injectionContainer.InjectionDependency();
+            #endregion
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -65,14 +74,14 @@ namespace EFCore.UoWRepository
                 .GetRequiredService<ApplicationContext>();
             if (db.Database.EnsureCreated())
             {
-                db.Departamentos.AddRange(Enumerable.Range(1, 10)
-                    .Select(d => new Departamento
+                db.Departments.AddRange(Enumerable.Range(1, 10)
+                    .Select(d => new Department
                     {
-                        Descricao = $"Departamento {d}",
-                        Colaboradores = Enumerable.Range(1, 10)
-                            .Select(c => new Colaborador
+                        Description = $"Departamento {d}",
+                        Colaborators = Enumerable.Range(1, 10)
+                            .Select(c => new Colaborator
                             {
-                                Nome = $"Colaborador {c}/{d}"
+                                Name = $"Colaborador {c}/{d}"
                             }).ToList()
                     }));
 
